@@ -1,0 +1,3 @@
+dir_rule:
+  base_dir: jmcomic_cache
+  rule: Bd_Atitle_Pindex

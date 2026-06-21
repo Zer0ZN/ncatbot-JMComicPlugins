@@ -1,0 +1,9 @@
+aiohttp
+
+requests
+cryptography
+
+jmcomic
+img2pdf
+
+ncatbot5

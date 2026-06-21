@@ -1,0 +1,6 @@
+name = "jmcomic_ncbot"
+version = "0.1.0"
+main = "plugin.py"
+entry_class = "JMComicPlugin"
+author = "Thsine"
+description = "禁漫插件"

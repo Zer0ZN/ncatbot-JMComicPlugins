@@ -1,0 +1,6 @@
+name = "hello_world"
+version = "0.1.0"
+main = "plugin.py"
+entry_class = "HelloWorldPlugin"
+author = "Thsine"
+description = "A simple hello world plugin for JMBOT."
