@@ -80,10 +80,11 @@ class JMComicPlugin(NcatBotPlugin):
 
     # 搜索本子方法
     async def _search_albums(self, event: MessageEvent, keyword: str, _page: int):
+        r_keyword = keyword.replace(",", " ")
         try:
             bot_id = str(event.self_id)
             # jmcomic客户端的搜索接口，返回一个分页对象，包含搜索结果和分页信息
-            page: JmSearchPage = client.search_site(search_query = keyword, page = _page)
+            page: JmSearchPage = client.search_site(search_query = r_keyword, page = _page)
             if page.total == 0:
                 await event.reply(text = "未找到相关本子")
 
@@ -96,7 +97,7 @@ class JMComicPlugin(NcatBotPlugin):
                 inner_forward = inner_fc.build()
                 # 构造外层转发消息，包含内层转发消息和一些提示文本
                 outer_fc = ForwardConstructor(user_id = bot_id, nickname = "_")
-                outer_fc.attach_text(f"关键词 {keyword} 第{_page}页")
+                outer_fc.attach_text(f"关键词 {r_keyword} 第{_page}页")
                 outer_fc.attach_text("——————搜索结果如下——————")
                 outer_fc.attach_forward(inner_forward)
                 # 构造完成后发送转发消息，根据消息类型选择私聊或群聊接口
@@ -152,7 +153,7 @@ class JMComicPlugin(NcatBotPlugin):
             
             # 本子下好后再次检查文件是否存在，存在则发送
             if os.path.exists(pdf_path):
-                self._send_file(event, pdf_path)
+                await self._send_file(event, pdf_path)
                 return
 
         except MissingAlbumPhotoException as e:
@@ -161,12 +162,12 @@ class JMComicPlugin(NcatBotPlugin):
             await event.reply(text = f"Error: {str(e)}")
  
     # 搜索命令，接收关键词和页码参数，调用搜索方法
-    @registrar.qq.on_command("/jm_search")
+    @registrar.qq.on_command("/jms")
     async def jm_search_cmd(self, event: MessageEvent, keyword: str, _page: Optional[int] = 1):
         await self._search_albums(event, keyword, _page)
 
     # 预览命令，接收本子id参数，返回本子标题和封面链接
-    @registrar.qq.on_command("/jm_preview")
+    @registrar.qq.on_command("/jmp")
     async def jm_preview_cmd(self, event: MessageEvent, album_id: str):
         try:
             album: JmAlbumDetail = client.get_album_detail(album_id)
@@ -179,13 +180,18 @@ class JMComicPlugin(NcatBotPlugin):
             await event.reply(text = f"Error: {str(e)}")
 
     # 帮助命令，介绍插件的使用方法
-    @registrar.qq.on_command("/jm_help")
+    @registrar.qq.on_command("/jmh")
     async def jm_help_cmd(self, event: MessageEvent):
         help_text = (
             "JMComic 插件使用说明：\n"
             "1. 下载本子：发送命令 /jm 本子ID，例如 /jm 123456\n"
-            "2. 搜索本子：发送命令 /jm_search <关键词> [页码]，例如 /jm_search 画师A 2\n"
-            "3. 预览本子：发送命令 /jm_preview 本子ID，例如 /jm_preview 123456\n"
-            "4. 帮助信息：发送命令 /jm_help"
+            "2. 搜索本子：发送命令 /jms <关键词> [页码]，例如 /jms 画师A 2\n"
+            "-如果有多个关键词请用英文逗号分隔, 例如 /jms <关键词1,关键词2> 页码\n"
+            "-搜索逻辑\n"
+            "——碧蓝档案,+全彩 仅显示全彩且是碧蓝档案的本\n"
+            "——碧蓝档案,-全彩  仅显示非全彩且是碧蓝档案的本\n"
+            "——碧蓝档案,全彩   显示结果包含全彩及碧蓝档案的本\n"
+            "3. 预览本子：发送命令 /jmp 本子ID，例如 /jmp 123456\n"
+            "4. 帮助信息：发送命令 /jmh"
         )
         await event.reply(text = help_text)
