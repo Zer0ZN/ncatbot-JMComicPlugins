@@ -41,14 +41,14 @@ class JMComicPlugin(NcatBotPlugin):
         pdf_path = self._pdf_path(album_id)
         # 本子存在则直接发送
         if os.path.exists(pdf_path):
-            await self._send_file(event, pdf_path)
+            self._send_file(event, pdf_path)
             return
         
         else:
             try:
                 await event.reply(text = f"开始下载本子 {album_id}")
-                await self.jm_option.download_album_async([album_id], extra=Feature.export_pdf(filename_rule= 'Aid'))
-                await self._send_file(event, self._pdf_path(album_id))
+                self.jm_option.download_album_async([album_id], extra=Feature.export_pdf(filename_rule= 'Aid'))
+                self._send_file(event, self._pdf_path(album_id))
                 
             except Exception as e:
                 await event.reply(text = f"下载过程中发生错误: {str(e)}")
