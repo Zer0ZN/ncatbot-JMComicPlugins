@@ -46,7 +46,6 @@ class JMComicPlugin(NcatBotPlugin):
             await event.reply(text = f"开始下载本子 {album_id}")
             await self.jm_option.download_album_async([album_id], extra=Feature.export_pdf(filename_rule= 'Aid'))
             
-            
         except Exception as e:
             await event.reply(text = f"下载过程中发生错误: {str(e)}")
 
