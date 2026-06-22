@@ -44,13 +44,9 @@ class JMComicPlugin(NcatBotPlugin):
     async def _download_album(self, event: MessageEvent, album_id: str):
         pdf_path = self._pdf_path(album_id)
         try:
-            # 检查文件是否存在，存在则发送。
-            if os.path.exists(pdf_path):
-                await self._send_file(event, pdf_path)
-            else:
-                await event.reply(text = f"开始下载本子 {album_id}")
-                await self.jm_option.download_album_async([album_id], extra=Feature.export_pdf(filename_rule= 'Aid'))
-                await self._send_file(event, pdf_path)
+            await event.reply(text = f"开始下载本子 {album_id}")
+            await self.jm_option.download_album_async([album_id], extra=Feature.export_pdf(filename_rule= 'Aid'))
+            await self._send_file(event, pdf_path)
             
         except Exception as e:
             await event.reply(text = f"下载过程中发生错误: {str(e)}")
@@ -147,11 +143,16 @@ class JMComicPlugin(NcatBotPlugin):
     # 下载命令，接收本子id参数，调用下载方法
     @registrar.qq.on_command("/jm")
     async def jm_download_cmd(self, event: MessageEvent, album_id: str) -> Optional[str]:
+        pdf_path = self._pdf_path(album_id)
         # 优先检查本子是否存在
         try:
             album: JmAlbumDetail = client.get_album_detail(album_id) # 这行删掉会出问题
 
-            await self._download_album(event, album_id)
+            # 检查本子文件是否存在缓存文件夹里
+            if os.path.exists(pdf_path):
+                await self._send_file(event, pdf_path)
+            else:
+                await self._download_album(event, album_id)
 
         except MissingAlbumPhotoException as e:
             await event.reply(text = f"请求的本子不存在\n原因可能为:\n1. 本子id有误\n2. 该本只对登录用户可见")
