@@ -147,13 +147,11 @@ class JMComicPlugin(NcatBotPlugin):
         try:
             album: JmAlbumDetail = client.get_album_detail(album_id) # 这行删掉会出问题
 
-            # 本子下好后再次检查文件是否存在，存在则发送。
+            # 检查文件是否存在，存在则发送。
             if os.path.exists(pdf_path):
                 await self._send_file(event, pdf_path)
-
-            await self._download_album(event, album_id)
-            
-            
+            else:
+                await self._download_album(event, album_id)
 
         except MissingAlbumPhotoException as e:
             await event.reply(text = f"请求的本子不存在\n原因可能为:\n1. 本子id有误\n2. 该本只对登录用户可见")
