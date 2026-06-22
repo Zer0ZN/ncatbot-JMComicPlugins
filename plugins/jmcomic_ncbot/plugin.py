@@ -1,3 +1,8 @@
+# 该项目在不考虑异常事件处理的情况下能够稳定正常运行jmcomic插件并进行搜索、预览、下载与发送本子(我用18年内存只有4个G的树莓派都可以跑)
+# 如果你在使用过程中发现问题或有更好的实现方式请随意修改代码 ;)
+# 你需要的文档有：https://docs.ncatbot.xyz/ 以及 https://jmcomic.readthedocs.io/zh-cn/latest/
+# By: Thsine
+
 import os
 from typing import Optional
 
@@ -8,7 +13,6 @@ from ncatbot.types import MessageArray
 from ncatbot.plugin import NcatBotPlugin
 from ncatbot.types.qq import ForwardConstructor
 from ncatbot.event.qq import MessageEvent, GroupMessageEvent, PrivateMessageEvent
-
 
 class JMComicPlugin(NcatBotPlugin):
     async def on_load(self):
@@ -148,11 +152,11 @@ class JMComicPlugin(NcatBotPlugin):
         pdf_path = self._pdf_path(album_id)
         # 优先检查本子是否存在
         try:
-            album: JmAlbumDetail = client.get_album_detail(album_id)
+            album: JmAlbumDetail = client.get_album_detail(album_id) # 这行删掉会出问题
 
             await self._download_album(event, album_id)
             
-            # 本子下好后再次检查文件是否存在，存在则发送
+            # 本子下好后再次检查文件是否存在，存在则发送。
             if os.path.exists(pdf_path):
                 await self._send_file(event, pdf_path)
                 return
