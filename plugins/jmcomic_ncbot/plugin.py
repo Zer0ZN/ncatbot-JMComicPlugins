@@ -21,7 +21,7 @@ class JMComicPlugin(NcatBotPlugin):
             os.path.join(os.path.dirname(__file__), "../../")
         )
         # 缓存目录
-        self.base_dir = os.path.join(project_root, "image_cache")
+        os.makedirs("image_cache", exist_ok=True)
         self.base_dir = os.path.join(project_root, "jmcomic_cache")
         # 导入参数配置
         config_path = os.path.join(os.path.dirname(__file__), "option.yml")
