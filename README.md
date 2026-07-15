@@ -11,7 +11,9 @@
 
 pip install -r requirements.txt -i https://mirrors.aliyun.com/pypi/simple
 
+## 想要修改代码
 [你会需要ncatbot的文档](https://docs.ncatbot.xyz/)
+[JmComic详细文档](https://jmcomic.readthedocs.io/zh-cn/latest/)
 
 ## 项目结构
 ```
@@ -33,7 +35,6 @@ ncatbot-JMComicPlugins/
 
 给ncatbot登录的QQ发送/jmh获取
 
-[JmComic详细文档](https://jmcomic.readthedocs.io/zh-cn/latest/)
 
 ## 鸣谢
 [NcatBot](https://github.com/ncatbot/NcatBot)
