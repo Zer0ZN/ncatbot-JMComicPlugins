@@ -30,7 +30,8 @@ ncatbot-JMComicPlugins/
 ```
 
 ## 插件可用指令
-请向挂载插件的ncatbot发送/jmh获取
+
+给ncatbot登录的QQ发送/jmh获取
 
 [JmComic详细文档](https://jmcomic.readthedocs.io/zh-cn/latest/)
 
