@@ -75,7 +75,7 @@ class JMComicPlugin(NcatBotPlugin):
 
         # 上传过程中可能发生错误，例如文件过大、网络问题等
         except Exception as e:
-            await event.reply(text = f"文件较大，请稍等")
+            await event.reply(text = f"上传发生错误")
 
     # 搜索本子方法
     async def _search_albums(self, event: MessageEvent, keyword: str, _page: int):
