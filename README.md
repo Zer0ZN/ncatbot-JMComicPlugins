@@ -22,9 +22,11 @@ ncatbot-JMComicPlugins/
 ├── main.py                  # 启动入口(可选，也可直接用 ncatbot run)
 ├── plugins/                 # 插件目录
 │   ├── hello_world/         # 测试用插件(可卸载)
+|       ├── __pycache__
 │   │   ├── manifest.toml
 │   │   └── plugin.py
-│   └── BilibiliParser/      # JMComic插件
+│   └── jmcomic_ncbot/      # JMComic插件
+|       ├── __pycache__
 │       ├── manifest.toml
 │       ├── option.yml
 │       └── plugin.py
